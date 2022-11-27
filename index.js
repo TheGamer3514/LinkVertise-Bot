@@ -1,56 +1,39 @@
 require('dotenv').config()
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const Linkvertise = require("./lib/linkvertise")
-const linkvertise = new Linkvertise(process.env.linkvertise_id)
-const client = new Client({
+const fs = require('node:fs');
+const path = require('node:path');
+const Discord = require("discord.js")
+const { Client, GatewayIntentBits, EmbedBuilder, Collection, DiscordAPIError } = require('discord.js');
+const prefix = process.env.prefix;
+
+const client = new Discord.Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers,]
 });
+client.commands = new Discord.Collection();
+const commands = fs.readdirSync("./commands").filter(file => file.endsWith(".js"))
+for (file of commands) {
+    const commandName = file.split(".")[0]
+    const command = require(`./commands/${commandName}`)
+    client.commands.set(commandName, command)
+  }
+ 
 
 client.once("ready", async () => {
-    console.log("Ready to shorten some links baby!!!")
+    console.log(`Logged In As ${client.user.tag}\nReady to shorten some links baby!!!`)
 })
 
-client.on("messageCreate", (async (message) => {
-    if (message.author.bot) return;
-    const args = message.content.trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
-
-    if (command === '!help') {
-        const helpEmbed = new EmbedBuilder()
-        .setColor(0xE08616)
-        .setTitle('Help')
-	    .setURL('https://github.com/TheGamer3514/LinkVertise-Bot')
-	    .setDescription('Here are my commands!')
-	    .setThumbnail('https://i.imgur.com/06Ccmfx.png')
-	    .addFields(
-	    	{ name: "``!help``", value: 'Show The Help Menu!', inline: true },
-            { name: "``!linkvertise``", value: 'Shorten A Link!!', inline: true },
-	    )
-	    .setTimestamp()
-	    .setFooter({ text: 'Bot Made By Gamer3514#7679' });
-        message.reply({ embeds: [helpEmbed] });
+client.on("messageCreate", message => {
+    if(message.content.startsWith(prefix)) {
+        const args = message.content.slice(prefix.length).trim().split(/ +/g)
+        const commandName = args.shift()
+        const command = client.commands.get(commandName)
+        if(!command) return
+        command.run(client, message, args)
     }
-    if (command === '!linkvertise') {
-        let link = args[0];
-        if (!link) return message.reply("Please provide a valid link to shorten!");
-        const linkvertiseEmbed = new EmbedBuilder()
-        .setColor(0xE08616)
-        .setTitle('Url Shortner')
-	    .setURL('https://github.com/TheGamer3514/LinkVertise-Bot')
-	    .setDescription('Here is your link!')
-	    .setThumbnail('https://i.imgur.com/06Ccmfx.png')
-	    .addFields(
-	    	{ name: "Link:", value: linkvertise.getLink(link)},
-	    )
-	    .setTimestamp()
-	    .setFooter({ text: 'Bot Made By Gamer3514#7679' });
-        message.reply({ embeds: [linkvertiseEmbed] });
-    }
+})
 
-}));
 
 client.login(process.env.token)
