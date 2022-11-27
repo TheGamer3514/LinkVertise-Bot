@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Gamer3514",
+  "author": "TheGamer3514",
   "license": "MIT",
   "dependencies": {
     "btoa": "^1.2.1",
