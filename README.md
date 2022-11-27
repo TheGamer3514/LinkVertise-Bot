@@ -9,8 +9,7 @@ Make a pull request and i will check over it!
 1. Rename `.env.example` to `.env` then fill out the config!
 2. Run `npm i`
 3. Run `node .`
-4. Done! If you want to change more then that is fine!
-
+4. Done! Now you can enjoy shortening links from discord!
 
 # Links:
 - [Discord Server](https://discord.gg/WeQ3TpdfZM)

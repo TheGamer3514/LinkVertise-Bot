@@ -37,7 +37,18 @@ client.on("messageCreate", (async (message) => {
     if (command === '!linkvertise') {
         let link = args[0];
         if (!link) return message.reply("Please provide a valid link to shorten!");
-        message.reply("Here Is Your Shortened Link! " + linkvertise.getLink(link));
+        const linkvertiseEmbed = new EmbedBuilder()
+        .setColor(0xE08616)
+        .setTitle('Url Shortner')
+	    .setURL('https://github.com/TheGamer3514/LinkVertise-Bot')
+	    .setDescription('Here is your link!')
+	    .setThumbnail('https://i.imgur.com/06Ccmfx.png')
+	    .addFields(
+	    	{ name: "Link:", value: linkvertise.getLink(link)},
+	    )
+	    .setTimestamp()
+	    .setFooter({ text: 'Bot Made By Gamer3514#7679' });
+        message.reply({ embeds: [linkvertiseEmbed] });
     }
 
 }));
