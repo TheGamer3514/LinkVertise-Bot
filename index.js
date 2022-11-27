@@ -1,11 +1,7 @@
 require('dotenv').config()
-
-const { Client, GatewayIntentBits } = require('discord.js');
-
+const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const Linkvertise = require("./lib/linkvertise")
-
 const linkvertise = new Linkvertise(process.env.linkvertise_id)
-
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -24,12 +20,24 @@ client.on("messageCreate", (async (message) => {
     const command = args.shift().toLowerCase();
 
     if (command === '!help') {
-        message.reply("``!help`` - Show The Help Menu\n``!linkvertise`` - Shorten A Link!");
+        const helpEmbed = new EmbedBuilder()
+        .setColor(0xE08616)
+        .setTitle('Help')
+	    .setURL('https://github.com/TheGamer3514/LinkVertise-Bot')
+	    .setDescription('Here are my commands!')
+	    .setThumbnail('https://i.imgur.com/06Ccmfx.png')
+	    .addFields(
+	    	{ name: "``!help``", value: 'Show The Help Menu!', inline: true },
+            { name: "``!linkvertise``", value: 'Shorten A Link!!', inline: true },
+	    )
+	    .setTimestamp()
+	    .setFooter({ text: 'Bot Made By Gamer3514#7679' });
+        message.reply({ embeds: [helpEmbed] });
     }
     if (command === '!linkvertise') {
         let link = args[0];
         if (!link) return message.reply("Please provide a valid link to shorten!");
-        message.reply(linkvertise.getLink(link));
+        message.reply("Here Is Your Shortened Link! " + linkvertise.getLink(link));
     }
 
 }));
