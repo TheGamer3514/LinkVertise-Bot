@@ -1,0 +1,17 @@
+{
+  "name": "linkvertisebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gamer3514",
+  "license": "MIT",
+  "dependencies": {
+    "btoa": "^1.2.1",
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3",
+    "linkvertise": "^1.0.1"
+  }
+}
