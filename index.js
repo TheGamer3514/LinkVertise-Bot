@@ -1,5 +1,4 @@
 require('dotenv').config()
-const load_slash_commands = require('./deploy-commands.js')
 const fs = require('node:fs');
 const path = require('node:path');
 const Discord = require("discord.js")
@@ -21,23 +20,6 @@ for (file of commands) {
     client.commands.set(commandName, command)
   }
  
-const slashcommandsPath = path.join(__dirname, 'slashcommands');
-const slashcommandFiles = fs.readdirSync(slashcommandsPath).filter(file => file.endsWith('.js'));
-
-for (const file of slashcommandFiles) {
-	const filePath = path.join(slashcommandsPath, file);
-	const command = require(filePath);
-	if ('data' in command && 'execute' in command) {
-		client.commands.set(command.data.name, command);
-	} else {
-		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
-	}
-}
-
-
-
-
-
   client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
     const command = interaction.client.commands.get(interaction.commandName);
